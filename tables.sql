@@ -4,17 +4,17 @@ BEGIN;
 
 DROP TABLE IF EXISTS "subject", "verb", "complement";
 
-CREATE TABLE IF NOT EXIST "subject" (
+CREATE TABLE IF NOT EXISTS"subject" (
     "id" serial PRIMARY Key,
     "name" text NOT NULL
 );
 
-CREATE TABLE IF NOT EXIST "verb" (
+CREATE TABLE IF NOT EXISTS"verb" (
     "id" serial PRIMARY Key,
     "name" text NOT NULL
 );
 
-CREATE TABLE IF NOT EXIST "complement" (
+CREATE TABLE IF NOT EXISTS"complement" (
     "id" serial PRIMARY Key,
     "name" text NOT NULL
 );
@@ -50,8 +50,8 @@ BEGIN;
 -- PostGres avec le type serial n'incrémente pas automatiquement de façon implicite la séquence rattaché à la colonne !
 -- Il faut donc mettre à jour la valeur courante de chacune des séquences en séléctionnant l'id maximum de chaque table
 
-SELECT setval('list_id_seq', (SELECT MAX(id) from "list"));
-SELECT setval('card_id_seq', (SELECT MAX(id) from "card"));
-SELECT setval('tag_id_seq', (SELECT MAX(id) from "tag"));
+SELECT setval('subject_id_seq', (SELECT MAX(id) from "subject"));
+SELECT setval('verb_id_seq', (SELECT MAX(id) from "verb"));
+SELECT setval('complement_id_seq', (SELECT MAX(id) from "complement"));
 
 COMMIT;
