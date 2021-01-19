@@ -21,6 +21,8 @@
   "homepage": "https://github.com/HaCoBa/uneExcuseBidonParJour#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "node-cron": "^2.0.3",
     "twitter": "^1.7.1"
   }
 }
