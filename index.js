@@ -20,7 +20,7 @@ const clientDB = new Client({
     host: process.env.PGHOST,
     database: process.env.PGDATABASE,
     password: process.env.PGPASSWORD,
-    port: 5432,
+    port: process.env.PGPORT,
 });
 clientDB.connect();
 
