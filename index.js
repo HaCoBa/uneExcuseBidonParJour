@@ -23,7 +23,6 @@ const clientDB = new Client({
     port: 5432,
 });
 clientDB.connect();
-// console.log(clientDB);
 
 let subject='';
 let verb='';
