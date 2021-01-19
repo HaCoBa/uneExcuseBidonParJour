@@ -1,31 +1,17 @@
-// ENV variables
-const dotenv = require('dotenv');
-dotenv.config();
-const PORT = process.env.PORT || 3000;
+require('dotenv').config();
+var Twitter = require('twitter');
 
-// Express server
-const express = require('express');
-
-const app = express();
-
-// Twitter part
-const Twitter = require('twitter');
-
-const client = new Twitter({
+var client = new Twitter({
     consumer_key: process.env.API_KEY,
     consumer_secret: process.env.API_SECRET_KEY,
     access_token_key: process.env.ACCESS_TOKEN_KEY,
     access_token_secret: process.env.ACCESS_TOKEN_SECRET,
 });
 
-const new_tweet = '';
+const new_tweet = 'I Love Twitter';
 
-// client.post('statuses/update', {status: new_tweet},  function(error, tweet, response) {
-//     console.log(tweet);  // Tweet body.
-//     console.log(response);  // Raw response object.
-//   });
-
-// Launching server
-app.listen( PORT, () => {
-    console.log(`Transplanage vers http://localhost:${PORT}`);
-})
+client.post('statuses/update', {status: new_tweet},  function(error, tweet, response) {
+    console.log(error);  // Error body.
+    // console.log(tweet);  // Tweet body.
+    // console.log(response);  // Raw response object.
+    });

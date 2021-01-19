@@ -4,8 +4,7 @@
   "description": "Twitter Bot that will send a dumb excuse each day",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -22,10 +21,6 @@
   "homepage": "https://github.com/HaCoBa/uneExcuseBidonParJour#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "ejs": "^3.1.5",
-    "express": "^4.17.1",
-    "nodemon": "^2.0.7",
-    "pg": "^8.5.1",
     "twitter": "^1.7.1"
   }
 }
