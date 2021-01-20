@@ -68,7 +68,7 @@ clientDB.connect();
         });
     }
 
-    let subject = getRandomString('table'); // mais ici, c'est toujours undefined
+    let subject = getRandomString('subject'); // mais ici, c'est toujours undefined
     console.log(subject);
 
     // let subjectId = getRandomInDBTable(1, getTableLength());
