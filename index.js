@@ -68,30 +68,26 @@ clientDB.connect(function(err) {
         new_tweet = await buildNewTweet();
         console.log(new_tweet);
       
+        // ! Je récupère les archives
         let queryResponse = await clientDB.query(`SELECT * FROM archive`);
         let archives = queryResponse.rows;
         // console.log(archives);
         
+        // ! La requête push fonctionne ici
         let databaseUpdate = await clientDB.query(`INSERT INTO archive VALUES ('test')`);
-
         queryResponse = await clientDB.query(`SELECT * FROM archive`);
         archives = queryResponse.rows;
         console.log(archives);
 
+        // ! A finir : tester si chaque tweet est unique et agit en conséquence
         archives.map(entrie => {
             if(entrie.phrase !== new_tweet) {
                 console.log('le texte est différent');
             } else {
                 console.log('le texte est identique');
+
             }
         })
-
- 
-
-
-
-
-
     
         // To create that will post, I need to authenticate via
         // the twitter library by using connexion informations
