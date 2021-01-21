@@ -23,12 +23,51 @@ const clientDB = new Client({
     port: process.env.PGPORT,
 });
 // Connecting to the database
-clientDB.connect();
+clientDB.connect(function(err) {
+    if(err) {
+        throw err;
+    } else {
+        console.log('Connected to databe excusebidon!');
+    }
+});
 
 // cron.schedule('10 * * * * *', function() {
 //     console.log('exécuter une tâche à chaque minute');
 
+    const getRandomId = function(min, max) {
+        return Math.floor(Math.random() * (max-min)+min);
+    }
+
+    function getRandomTerm(table, min, max) {
+
+        const randomId = getRandomId(min, max);
+
+        clientDB.query(`SELECT * FROM ${table} WHERE id=${randomId}`, (error, response) => {
+            if(error) {
+                console.error;
+            } else {
+                // console.log(response.rows[0].name);
+                return response.rows[0].name;
+            }
+        })
+    }
+
+    async function prepareTweetPart() {
+        const subject = await getRandomTerm('subject', 1, 112);
+        const verb = await getRandomTerm('verb', 1, 112);
+        const complement = await getRandomTerm('complement', 1, 112); 
+        return subject + ' ' + verb + ' ' + complement;
+    }
     
+    // async function writeTweet() {
+    //     const part = await prepareTweetPart();
+    //     console.log(part);
+    //     const new_tweet = subject + ' ' + verb + ' ' + complement + '... #ExcuseBidon #CadavreExquis';
+    //     console.log(new_tweet);
+    // }
+
+    // writeTweet();
+
 
     // // To create that will post, I need to authenticate via
     // // the twitter library by using connexion informations
