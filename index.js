@@ -97,9 +97,9 @@ cron.schedule('* * * * *', function() {
          * before executing each call, so I'm sure to return something
          */
         const buildNewTweet = async () => {
-            let subject = await getRandomTerm('subject', 1, 112);
-            let verb = await getRandomTerm('verb', 1, 112);
-            let complement = await getRandomTerm('complement', 1, 112);
+            let subject = await getRandomTerm('subject', 0, 1);
+            let verb = await getRandomTerm('verb', 0, 1);
+            let complement = await getRandomTerm('complement', 0, 2);
             return subject + ' ' + verb + ' ' + complement;
         }
     
