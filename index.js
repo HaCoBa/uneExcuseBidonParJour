@@ -1,18 +1,28 @@
-// calling Express for the server
+/********************************************************************************************
+*********************************************************************************************
+*********************************************************************************************
+*****                                                                                   *****
+*****                                                                                   *****
+*****      Programme de Cadavre Exquis pour générer des excuses complètement bidon      *****
+*****                                                                                   *****
+*****                                                                                   *****
+*********************************************************************************************
+*********************************************************************************************
+********************************************************************************************/
+
+
+// Calling all the need librairies
 const express = require('express');
-//calling node-cron for the scheduled task
 const cron = require('node-cron');
-// I call dotenv to set an .env file for API key and access token
 const dotenv = require('dotenv');
-// I call the config saved in my .env file
 dotenv.config();
-// I call postgre library
 const { Client } = require('pg');
-// I call the twitter library installed
 var Twitter = require('twitter');
+
 
 // Creating an instance Express
 app = express();
+
 
 // Creating a new "client" for the database with the env informations
 const clientDB = new Client({
@@ -22,6 +32,8 @@ const clientDB = new Client({
     password: process.env.PGPASSWORD,
     port: process.env.PGPORT,
 });
+
+
 // Connecting to the database
 clientDB.connect(function(err) {
     if(err) {
@@ -32,64 +44,134 @@ clientDB.connect(function(err) {
     // }
 });
 
-// Scheduled task to generate 1 tweet per day
-// cron.schedule('* * * * *', function() {
-//     console.log('exécuter une tâche toutes les 5 secondes');
+
+// Scheduled task to generate 1 tweet every 6h
+cron.schedule('* * * * *', function() {
+    console.log('exécuter une tâche toutes les minutes');
+
 
     // I set up an init function that  I parameter as async
     // This way, I can use await properties for various function that need a response from a databese query
     const init = async () => {
 
+
+        // I set up globaly all the variables I'll need
+        let new_tweet = '';
+        let new_status = '';
+        let archives = [];
+
     
+        /**
+         * ! Function to get a random id between an interval
+         * @param {number} min smallest id in the interval
+         * @param {number} max biggest id in the interval
+         */
         const getRandomId = (min, max) => {
             return Math.floor(Math.random() * (max-min)+min);
         };
+
     
+        /**
+         * ! Function to get a random term in each table of the database
+         * @param {string} table table name from the database (subject, verb, complement)
+         * @param {number} min smallest if in the interval
+         * @param {number} max biggest id in the interval
+         */
         const getRandomTerm = async (table, min, max) => {
     
+            // I call getRandomId to generate the id
             const randomId = getRandomId(min, max);
       
+            // I call the table I need and stock the result in a variable
             const queryResponse = await clientDB.query(`SELECT * FROM ${table}`);
             
+            // I extract the random term found with the request and the id
             return queryResponse.rows[randomId].name;
-    
-            // console.log("response", response);
+            // ! console.log("response", response);
         };
     
-        let new_tweet = '';
 
+        /**
+         * ! Function to generate the tweet content
+         * The function is async so I can call getRandomTerm and wait for the result
+         * before executing each call, so I'm sure to return something
+         */
         const buildNewTweet = async () => {
             let subject = await getRandomTerm('subject', 1, 112);
             let verb = await getRandomTerm('verb', 1, 112);
             let complement = await getRandomTerm('complement', 1, 112);
-            return subject + ' ' + verb + ' ' + complement + '... #ExcuseBidon #CadavreExquis';
+            return subject + ' ' + verb + ' ' + complement;
         }
     
-        new_tweet = await buildNewTweet();
-        console.log(new_tweet);
-      
-        // ! Je récupère les archives
-        let queryResponse = await clientDB.query(`SELECT * FROM archive`);
-        let archives = queryResponse.rows;
-        // console.log(archives);
-        
-        // ! La requête push fonctionne ici
-        let databaseUpdate = await clientDB.query(`INSERT INTO archive VALUES ('test')`);
-        queryResponse = await clientDB.query(`SELECT * FROM archive`);
-        archives = queryResponse.rows;
-        console.log(archives);
 
-        // ! A finir : tester si chaque tweet est unique et agit en conséquence
-        archives.map(entrie => {
-            if(entrie.phrase !== new_tweet) {
-                console.log('le texte est différent');
-            } else {
-                console.log('le texte est identique');
+        /**
+         * ! Function to write the tweet content
+         * I put everything return by buidNewTweet in a variables
+         */
+        const writeNewTweet = async () => {
+            new_tweet = await buildNewTweet();
+            // ! console.log(new_tweet);
+        }
 
-            }
-        })
+
+        /**
+         * ! Function to check the duplicate
+         * I check if the tweet alredy exist of not.
+         * I only want unique tweets, no duplicate.
+         */      
+        const checkExistingTweets = async () => {
+
+            // I wait for a filled new_tweet
+            await writeNewTweet();
+
+            // I query all the archive
+            let queryResponse = await clientDB.query(`SELECT * FROM archive`);
+            archives = queryResponse.rows;
+            // ! console.log(archives);
+
+            // I check each entrie to see ig the new_tweet is unique or not
+            archives.map(entrie => {
+                // ! console.log("tweet à archiver", new_tweet);
+                if(entrie.phrase === new_tweet) {
+                    console.log('le texte est identique');
+                    // If the text is already in the database
+                    // the script is launched again from the beginning
+                    lauchingCadavreExquis();
+                } else {
+                    // ! console.log(entrie.phrase);
+                    // ! console.log(archives);
+                    // ! console.log('le texte est différent');
+                    // If not, I push the new tweet in the database
+                    // I set the "phrase" as primary key, wich mean that each must be unique
+                    // sounds like a double security
+                    clientDB.query(`INSERT INTO archive VALUES ('${new_tweet}')`, (error, response) => {
+                        if(error) {
+                            console.log("Cette phrase existe déjà");
+                        } else {
+                            console.log("La phrase a bien été archivée dans la base de données");
+                        }
+                    });
+                }
+            })
+        }
+
+        /**
+         * ! Function that launch the Cadavre Exquis
+         * This function will write the full content of the tweet
+         * the text + the hashtags
+         */ 
+        const lauchingCadavreExquis = async () => {
+            await checkExistingTweets();
+
+            new_status = new_tweet + "... #ExcuseBidon #CadavreExquis";
+        }
+
+        // I call this function with await option so that until
+        // new_status is completed
+        // The tweet won't be post
+        await lauchingCadavreExquis();
     
-        // To create that will post, I need to authenticate via
+        // To create that tweet post, I need to authenticate via
         // the twitter library by using connexion informations
         // set and found in the developer tools dashboard
         const client = new Twitter({
@@ -99,17 +181,18 @@ clientDB.connect(function(err) {
             access_token_secret: process.env.ACCESS_TOKEN_SECRET,
         });
     
-        // // I post the tweet
-        // client.post('statuses/update', {status: new_tweet},  function(error, tweet, response) {
-        //     console.log(error);  // Error body.
-        //     // console.log(tweet);  // Tweet body.
-        //     // console.log(response);  // Raw response object.
-        // });
+        // I post the tweet
+        client.post('statuses/update', {status: new_status},  function(error, tweet, response) {
+            console.log(error);  // Error body.
+            // console.log(tweet);  // Tweet body.
+            // console.log(response);  // Raw response object.
+        });
     
     }
     
+    // Start the full program
     init();
 
-// });
+});
 
 app.listen(3000);
