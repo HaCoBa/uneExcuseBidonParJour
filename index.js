@@ -137,31 +137,6 @@ cron.schedule('* * * * *', function() {
                     console.log("La phrase a bien été archivée dans la base de données");
                 }
             });
-
-            // // I check each entrie to see ig the new_tweet is unique or not
-            // archives.map(entrie => {
-            //     // ! console.log("tweet à archiver", new_tweet);
-            //     if(entrie.phrase === new_tweet) {
-            //         console.log('le texte est identique');
-            //         // If the text is already in the database
-            //         // the script is launched again from the beginning
-            //         lauchingCadavreExquis();
-            //     } else {
-            //         // ! console.log(entrie.phrase);
-            //         // ! console.log(archives);
-            //         // ! console.log('le texte est différent');
-            //         // If not, I push the new tweet in the database
-            //         // I set the "phrase" as primary key, wich mean that each must be unique
-            //         // sounds like a double security
-            //         clientDB.query(`INSERT INTO archive VALUES ('${new_tweet}')`, (error, response) => {
-            //             if(error) {
-            //                 console.log("Cette phrase existe déjà");
-            //             } else {
-            //                 console.log("La phrase a bien été archivée dans la base de données");
-            //             }
-            //         });
-            //     }
-            // })
         }
 
         /**
