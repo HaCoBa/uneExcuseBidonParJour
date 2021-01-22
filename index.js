@@ -46,7 +46,7 @@ clientDB.connect(function(err) {
 
 
 // Scheduled task to generate 1 tweet every 6h
-cron.schedule('* * * * *', function() {
+cron.schedule('* 6 * * *', function() {
     console.log('exécuter une tâche toutes les minutes');
 
 
