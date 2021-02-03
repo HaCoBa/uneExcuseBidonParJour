@@ -1,7 +1,7 @@
 {
   "name": "uneexcusebidonparjour",
   "version": "1.0.0",
-  "description": "Twitter Bot that will send a dumb excuse each day",
+  "description": "Twitter Bot that will send a dumb excuse every 6 h each day",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

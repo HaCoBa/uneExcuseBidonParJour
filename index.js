@@ -39,15 +39,15 @@ clientDB.connect(function(err) {
     if(err) {
         throw err;
     }
-    // else {
-    //     console.log('Connected to databe excusebidon!');
-    // }
+    else {
+        console.log('Connected to databe excusebidon!');
+    }
 });
 
 
 // Scheduled task to generate 1 tweet every 6h
-cron.schedule('* 6 * * *', function() {
-    // console.log('exécuter une tâche toutes 6 heures');
+cron.schedule('2 * * * *', function() {
+    console.log('exécuter une tâche toutes les 2 minutes');
 
 
     // I set up an init function that  I parameter as async
@@ -58,7 +58,6 @@ cron.schedule('* 6 * * *', function() {
         // I set up globaly all the variables I'll need
         let new_tweet = '';
         let new_status = '';
-        let archives = [];
 
     
         /**
@@ -97,9 +96,9 @@ cron.schedule('* 6 * * *', function() {
          * before executing each call, so I'm sure to return something
          */
         const buildNewTweet = async () => {
-            let subject = await getRandomTerm('subject', 0, 109);
-            let verb = await getRandomTerm('verb', 0, 109);
-            let complement = await getRandomTerm('complement', 0, 109);
+            let subject = await getRandomTerm('public.subject', 0, 109);
+            let verb = await getRandomTerm('public.verb', 0, 109);
+            let complement = await getRandomTerm('public.complement', 0, 109);
             return subject + ' ' + verb + ' ' + complement;
         }
     
@@ -125,11 +124,11 @@ cron.schedule('* 6 * * *', function() {
             await writeNewTweet();
 
             // I query all the archive
-            let queryResponse = await clientDB.query(`SELECT * FROM archive`);
+            let queryResponse = await clientDB.query(`SELECT * FROM public.archive`);
             archives = queryResponse.rows;
             // ! console.log(archives);
 
-            clientDB.query(`INSERT INTO archive VALUES ('${new_tweet}')`, (error, response) => {
+            clientDB.query(`INSERT INTO public.archive VALUES ('${new_tweet}')`, (error, response) => {
                 if(error) {
                     console.log("Cette phrase existe déjà");
                     lauchingCadavreExquis();
