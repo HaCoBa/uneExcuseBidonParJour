@@ -47,7 +47,7 @@ clientDB.connect(function(err) {
 
 // Scheduled task to generate 1 tweet every 6h
 cron.schedule('* 6 * * *', function() {
-    console.log('exécuter une tâche toutes les minutes');
+    // console.log('exécuter une tâche toutes 6 heures');
 
 
     // I set up an init function that  I parameter as async
@@ -151,8 +151,7 @@ cron.schedule('* 6 * * *', function() {
         }
 
         // I call this function with await option so that until
-        // new_status is completed
-        // The tweet won't be post
+        // new_status is completed the tweet won't be post
         await lauchingCadavreExquis();
     
         // To create that tweet post, I need to authenticate via
