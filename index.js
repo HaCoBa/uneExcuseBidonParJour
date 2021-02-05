@@ -50,9 +50,14 @@ clientDB.connect(function(err) {
 
 
 // Scheduled task to generate 1 tweet every hour
-cron.schedule('* * 0-23 * * *', function() {
+cron.schedule('0 0-23 * * *', function() {
+    /**
+     * 0 = at minute 0 past
+     * 0-23 = every hour from 0 through 23
+     */
     console.log('Génération d\'une excuse bidon toutes les heures');
 
+    let tweetNumber = 1;
 
     // I set up an init function that  I parameter as async
     // This way, I can use await properties for various function that need a response from a databese query
@@ -62,7 +67,6 @@ cron.schedule('* * 0-23 * * *', function() {
         // I set up globaly all the variables I'll need
         let new_tweet = '';
         let new_status = '';
-        let tweetNumber = 1;
 
     
         /**
