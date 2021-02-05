@@ -48,6 +48,7 @@ clientDB.connect(function(err) {
     }
 });
 
+let tweetNumber = 1;
 
 // Scheduled task to generate 1 tweet every hour
 cron.schedule('0 0-23 * * *', function() {
@@ -57,7 +58,6 @@ cron.schedule('0 0-23 * * *', function() {
      */
     console.log('Génération d\'une excuse bidon toutes les heures');
 
-    let tweetNumber = 1;
 
     // I set up an init function that  I parameter as async
     // This way, I can use await properties for various function that need a response from a databese query
@@ -156,13 +156,12 @@ cron.schedule('0 0-23 * * *', function() {
             await checkExistingTweets();
 
             new_status = "Excuse n°" + tweetNumber + "/221815 : " + new_tweet + "... #ExcuseBidon #CadavreExquis";
-            tweetNumber += 1;
         }
-
+        
         // I call this function with await option so that until
         // new_status is completed the tweet won't be post
         await lauchingCadavreExquis();
-    
+        
         // To create that tweet post, I need to authenticate via
         // the twitter library by using connexion informations
         // set and found in the developer tools dashboard
@@ -172,14 +171,15 @@ cron.schedule('0 0-23 * * *', function() {
             access_token_key: process.env.ACCESS_TOKEN_KEY,
             access_token_secret: process.env.ACCESS_TOKEN_SECRET,
         });
-    
+        
         // I post the tweet
         client.post('statuses/update', {status: new_status},  function(error, tweet, response) {
             console.log(error);  // Error body.
             // console.log(tweet);  // Tweet body.
             // console.log(response);  // Raw response object.
         });
-    
+        
+        tweetNumber += 1;
     }
     
     // Start the full program
