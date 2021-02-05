@@ -50,7 +50,7 @@ clientDB.connect(function(err) {
 
 
 // Scheduled task to generate 1 tweet every hour
-cron.schedule('* 1 * * *', function() {
+cron.schedule('* * 0-23 * * *', function() {
     console.log('Génération d\'une excuse bidon toutes les heures');
 
 
