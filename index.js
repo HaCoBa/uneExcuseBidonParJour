@@ -26,11 +26,15 @@ app = express();
 
 // Creating a new "client" for the database with the env informations
 const clientDB = new Client({
-    user: process.env.PGUSER,
-    host: process.env.PGHOST,
-    database: process.env.PGDATABASE,
-    password: process.env.PGPASSWORD,
-    port: process.env.PGPORT,
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
+    // user: process.env.PGUSER,
+    // host: process.env.PGHOST,
+    // database: process.env.PGDATABASE,
+    // password: process.env.PGPASSWORD,
+    // port: process.env.PGPORT,
 });
 
 
