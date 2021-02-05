@@ -367,6 +367,6 @@ INSERT INTO "complement" ("name") VALUES
 ('une potterhead pas très subtile mais qui fait de son mieux');
 
 INSERT INTO "archive" ("phrase") VALUES
-('Un chaton licorne a vomi sur mon agenda Totally Spies qui vient de Super U');
+('Ton chaton licorne a vomi sur mon agenda Totally Spies qui vient de Super U');
 
 COMMIT;
