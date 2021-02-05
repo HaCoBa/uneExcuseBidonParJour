@@ -40,14 +40,14 @@ clientDB.connect(function(err) {
         throw err;
     }
     else {
-        console.log('Connected to databe excusebidon!');
+        console.log('Connected to database excusebidon!');
     }
 });
 
 
 // Scheduled task to generate 1 tweet every 6h
-cron.schedule('2 * * * *', function() {
-    console.log('exécuter une tâche toutes les 2 minutes');
+cron.schedule('* * * * *', function() {
+    console.log('exécuter une tâche toutes les minutes');
 
 
     // I set up an init function that  I parameter as async
