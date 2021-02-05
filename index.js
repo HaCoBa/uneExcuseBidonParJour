@@ -49,9 +49,9 @@ clientDB.connect(function(err) {
 });
 
 
-// Scheduled task to generate 1 tweet every 6h
-cron.schedule('* * * * *', function() {
-    console.log('exécuter une tâche toutes les minutes');
+// Scheduled task to generate 1 tweet every hour
+cron.schedule('* 1 * * *', function() {
+    console.log('Génération d\'une excuse bidon toutes les heures');
 
 
     // I set up an init function that  I parameter as async
@@ -62,6 +62,7 @@ cron.schedule('* * * * *', function() {
         // I set up globaly all the variables I'll need
         let new_tweet = '';
         let new_status = '';
+        let tweetNumber = 1;
 
     
         /**
@@ -150,7 +151,8 @@ cron.schedule('* * * * *', function() {
         const lauchingCadavreExquis = async () => {
             await checkExistingTweets();
 
-            new_status = new_tweet + "... #ExcuseBidon #CadavreExquis";
+            new_status = "Excuse n°" + tweetNumber + "/221815 : " + new_tweet + "... #ExcuseBidon #CadavreExquis";
+            tweetNumber += 1;
         }
 
         // I call this function with await option so that until
