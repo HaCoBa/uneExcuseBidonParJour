@@ -1,4 +1,5 @@
 api.md
 .env
 .env_local
+.env_serveur
 /node_modules

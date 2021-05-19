@@ -17,8 +17,9 @@ const cron = require('node-cron');
 const dotenv = require('dotenv');
 dotenv.config();
 const { Client } = require('pg');
-var Twitter = require('twitter');
+let Twitter = require('twitter');
 
+let twitterPostId = 0;
 
 // Creating an instance Express
 app = express();
@@ -49,15 +50,15 @@ clientDB.connect(function(err) {
 });
 
 // Scheduled task to generate 1 tweet every hour
-cron.schedule('0,20,40 * * * *', function() {
+cron.schedule('20 * * * * *', function() {
     /**
      * 0 = at minute 0 past
      * 0-23 = every hour from 0 through 23
      */
-    console.log('Génération d\'une excuse bidon toutes les heures');
+    console.log('Génération d\'une excuse bidon toutes les 20 minutes');
 
 
-    // I set up an init function that  I parameter as async
+    // I set up an init function that I parameter as async
     // This way, I can use await properties for various function that need a response from a databese query
     const init = async () => {
 
@@ -103,9 +104,9 @@ cron.schedule('0,20,40 * * * *', function() {
          * before executing each call, so I'm sure to return something
          */
         const buildNewTweet = async () => {
-            let subject = await getRandomTerm('public.subject', 0, 109);
-            let verb = await getRandomTerm('public.verb', 0, 109);
-            let complement = await getRandomTerm('public.complement', 0, 109);
+            let subject = await getRandomTerm('public.subject', 0, 110);
+            let verb = await getRandomTerm('public.verb', 0, 110);
+            let complement = await getRandomTerm('public.complement', 0, 110);
             return subject + ' ' + verb + ' ' + complement;
         }
     
@@ -153,7 +154,8 @@ cron.schedule('0,20,40 * * * *', function() {
         const lauchingCadavreExquis = async () => {
             await checkExistingTweets();
 
-            new_status = new_tweet + "... #ExcuseBidon #CadavreExquis";
+            twitterPostId += 1;
+            new_status = "#" + twitterPostId + " : " + new_tweet + "... #ExcuseBidon #CadavreExquis";
         }
         
         // I call this function with await option so that until
