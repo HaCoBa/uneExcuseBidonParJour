@@ -49,11 +49,11 @@ clientDB.connect(function(err) {
     }
 });
 
-// Scheduled task to generate 1 tweet every hour
-cron.schedule('20 * * * * *', function() {
+// Scheduled task to generate 1 tweet every 20 minutes
+cron.schedule('0,20,40 0-23 * * *', function() {
     /**
-     * 0 = at minute 0 past
-     * 0-23 = every hour from 0 through 23
+     * 0,20,40 = At minute 0, 20, and 40 past
+     * 0-23 = every hour from 0 through 23.
      */
     console.log('Génération d\'une excuse bidon toutes les 20 minutes');
 
